@@ -1,25 +1,18 @@
 package com.weatherapplication.model.repo
 
-import android.app.Application
 import com.weatherapplication.model.repo.local.WeatherDao
-import com.weatherapplication.model.repo.local.WeatherDb
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlin.coroutines.CoroutineContext
+import com.weatherapplication.model.repo.remote.WeatherApiInterface
+import javax.inject.Inject
 
-class WeatherRepository(application: Application) : CoroutineScope {
+class WeatherRepository
+@Inject
+constructor(
+    private val weatherDao: WeatherDao,
+    private val apiInterface: WeatherApiInterface
+) {
 
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main
+    fun getCityNames(cityName: String) = weatherDao.queryLikeCityName(cityName)
 
-    private var weatherDao: WeatherDao?
-
-    init {
-        val db: WeatherDb? = WeatherDb.getDataBase(application)
-        weatherDao = db?.weatherDao()
-    }
-
-    fun getCityName(cityName: String) =
-        weatherDao?.queryLikeCityName(cityName)
+    suspend fun getLatLongForCity(cityName: String) = apiInterface.getCityLatLong()
 
 }

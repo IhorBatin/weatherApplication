@@ -2,6 +2,7 @@ package com.weatherapplication.model.repo.remote
 
 import com.weatherapplication.model.data.CityCoordinates
 import com.weatherapplication.model.data.WeatherForLocationResponse
+import com.weatherapplication.util.API_KEY
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -18,7 +19,4 @@ interface WeatherApiInterface {
         @Query("lon") longitude: String
     ) : WeatherForLocationResponse
 
-    companion object {
-        const val API_KEY = "76c30fb34ad592ba2418b54d5a445e72"
-    }
 }

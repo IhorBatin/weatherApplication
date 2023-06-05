@@ -1,5 +1,6 @@
 package com.weatherapplication.view
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.weatherapplication.R
+import com.weatherapplication.util.SP_LAST_CITY_NAME_KEY
 import com.weatherapplication.util.USE_USER_ENTRY
 import com.weatherapplication.view.ui.components.ErrorMessage
 import com.weatherapplication.view.ui.components.NextButton
@@ -22,9 +24,12 @@ class CitySelectorFragment : Fragment() {
     private val viewModel: WeatherViewModel by lazy { (activity as MainActivity).viewModel }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        getPreviousCityNameIfSaved()
+
         return ComposeView(requireContext()).apply {
             setContent {
                 WeatherApplicationTheme {
@@ -33,6 +38,7 @@ class CitySelectorFragment : Fragment() {
                         NextButton(onNextClick = {
                                 viewModel.checkCityExists()
                                 checkAndNavigateToWeatherFragment()
+                                saveCityNameToSp()
                             },
                             viewModel.selectedCityName.value.isNotEmpty()
                         )
@@ -41,6 +47,21 @@ class CitySelectorFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun saveCityNameToSp() {
+        with(requireActivity().getPreferences(Context.MODE_PRIVATE).edit()) {
+            putString(SP_LAST_CITY_NAME_KEY, viewModel.selectedCityName.value)
+            apply()
+        }
+    }
+
+    private fun getPreviousCityNameIfSaved() {
+        val cityNameFromPrevSession = requireActivity()
+            .getPreferences(Context.MODE_PRIVATE)
+            .getString(SP_LAST_CITY_NAME_KEY, "") ?: ""
+
+        viewModel.selectedCityName.value = cityNameFromPrevSession
     }
 
     private fun checkAndNavigateToWeatherFragment() {

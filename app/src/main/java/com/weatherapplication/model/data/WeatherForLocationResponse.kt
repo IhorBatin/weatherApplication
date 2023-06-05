@@ -2,6 +2,7 @@ package com.weatherapplication.model.data
 
 import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Json
+import kotlin.math.roundToInt
 
 @JsonClass(generateAdapter = true)
 data class WeatherForLocationResponse(
@@ -53,29 +54,36 @@ data class WeatherForLocationResponse(
 data class Main(
 
 	@Json(name="temp")
-	val temp: Any? = null,
+	val temp: Double? = null,
 
 	@Json(name="temp_min")
-	val tempMin: Any? = null,
+	val tempMin: Double? = null,
 
 	@Json(name="grnd_level")
-	val grndLevel: Int? = null,
+	val grndLevel: String? = null,
 
 	@Json(name="humidity")
-	val humidity: Int? = null,
+	val humidity: String? = null,
 
 	@Json(name="pressure")
-	val pressure: Int? = null,
+	val pressure: String? = null,
 
 	@Json(name="sea_level")
-	val seaLevel: Int? = null,
+	val seaLevel: String? = null,
 
 	@Json(name="feels_like")
-	val feelsLike: Any? = null,
+	val feelsLike: String? = null,
 
 	@Json(name="temp_max")
-	val tempMax: Any? = null
-)
+	val tempMax: Double? = null
+) {
+	fun getTemp(): String = "${temp?.roundToInt()}"
+
+	fun getMaxTemp(): String = "${tempMax?.roundToInt()}"
+
+	fun getMinTemp(): String = "${tempMin?.roundToInt()}"
+
+}
 
 @JsonClass(generateAdapter = true)
 data class Rain(

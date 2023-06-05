@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
 import androidx.compose.ui.platform.ComposeView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.weatherapplication.R
+import com.weatherapplication.util.USE_USER_ENTRY
 import com.weatherapplication.view.ui.components.ErrorMessage
 import com.weatherapplication.view.ui.components.NextButton
 import com.weatherapplication.view.ui.components.SelectCityBar
@@ -43,6 +45,8 @@ class CitySelectorFragment : Fragment() {
 
     private fun checkAndNavigateToWeatherFragment() {
         if (viewModel.doesCityExist.value)
-            findNavController().navigate(R.id.to_detailedWeatherFragment)
+            findNavController().navigate(
+                R.id.to_detailedWeatherFragment, bundleOf(USE_USER_ENTRY to true)
+            )
     }
 }

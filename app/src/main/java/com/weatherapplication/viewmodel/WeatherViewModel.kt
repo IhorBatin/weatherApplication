@@ -58,15 +58,19 @@ constructor(
 
     fun geocodeByCityName() {
         viewModelScope.launch {
-            val usCityName = "${selectedCityName.value} , US"
+            val usCityName = "${selectedCityName.value}, US"
             val response = repository.getLatLongForCity(usCityName)
             println("Response -> $response")
-            selectedCityLonLat.value = response[0]
-            getWeatherForCity()
+            updateCurrentLonLat(response[0])
+            updateWeatherForCity()
         }
     }
 
-    fun getWeatherForCity() {
+    fun updateCurrentLonLat(coordinates: CityCoordinates) {
+        selectedCityLonLat.value = coordinates
+    }
+
+    fun updateWeatherForCity() {
         viewModelScope.launch {
             val resp = selectedCityLonLat.value?.let { repository.getCityWeather(it) }
             println(resp)

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph_main"
+    app:startDestination="@id/citySelectorFragment">
+    <fragment
+        android:id="@+id/citySelectorFragment"
+        android:name="com.weatherapplication.view.CitySelectorFragment"
+        android:label="CitySelectorFragment" >
+        <action
+            android:id="@+id/to_detailedWeatherFragment"
+            app:destination="@id/detailedWeatherFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailedWeatherFragment"
+        android:name="com.weatherapplication.view.DetailedWeatherFragment"
+        android:label="DetailedWeatherFragment" />
+</navigation>

@@ -125,6 +125,7 @@ class MainActivity : AppCompatActivity() {
             when (grantResults[0]) {
                 PackageManager.PERMISSION_GRANTED -> getLastLocation()
                 PackageManager.PERMISSION_DENIED -> {
+                    findNavController(R.id.nav_host_fragment).navigate(R.id.to_citySelectorFragment)
                     Toast.makeText(
                         this,
                         "You can enter city manually...",
@@ -145,9 +146,9 @@ class MainActivity : AppCompatActivity() {
         ) == PackageManager.PERMISSION_GRANTED;
     }
 
-    fun getWeatherDataAndMoveToDetailsScreen() {
+    private fun getWeatherDataAndMoveToDetailsScreen() {
         viewModel.updateWeatherForCity()
-        findNavController(R.id.nav_host_fragment).setGraph(R.navigation.nav_graph_device_loc)
+        //findNavController(R.id.nav_host_fragment).navigate(R.id.to_detailedWeatherFragment)
     }
 
     override fun onBackPressed() {

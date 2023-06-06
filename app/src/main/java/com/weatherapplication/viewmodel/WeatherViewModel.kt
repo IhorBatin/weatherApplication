@@ -32,6 +32,8 @@ constructor(
     }
 
     fun updateLikeCityNames(cityName: String) {
+        // Making flag false, as we need to check again for new entry
+        doesCityExist.value = false
         viewModelScope.launch {
             if (cityName.isNotEmpty()) {
                 repository.getCityNames(cityName).collect {
@@ -82,7 +84,7 @@ constructor(
         possibleCityOptions.clear()
     }
 
-    fun onClearClick() {
+    fun clearCityOptions() {
         selectedCityName.value = ""
         possibleCityOptions.clear()
     }

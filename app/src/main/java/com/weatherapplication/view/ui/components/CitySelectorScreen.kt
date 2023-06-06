@@ -2,7 +2,13 @@ package com.weatherapplication.view.ui.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,14 +30,15 @@ fun SelectCityBar(viewModel: WeatherViewModel) {
             viewModel.updateLikeCityNames(it)
         },
         onDoneActionClick = {
-            //viewModel.setSelectedCityName(text)
+            viewModel.checkCityExists()
         },
         onItemClick = {
             viewModel.onItemClick(it)
             viewModel.selectedCityName.value = it.fullCityName
+            viewModel.checkCityExists()
         },
         onClearClick = {
-            viewModel.onClearClick()
+            viewModel.clearCityOptions()
         }
     )
 }
@@ -61,5 +68,22 @@ fun NextButton(
     ) {
         Text(text = "Check weather")
     }
+}
 
+@Composable
+fun CloseButton(
+    onCloseClick: () -> Unit
+) {
+    IconButton(
+        onClick = { onCloseClick() },
+        modifier = Modifier
+            .padding(8.dp)
+    ) {
+        Icon(
+            modifier = Modifier.size(32.dp),
+            imageVector = Icons.Default.Close,
+            tint = MaterialTheme.colorScheme.primary,
+            contentDescription = "Close city selector screen"
+        )
+    }
 }

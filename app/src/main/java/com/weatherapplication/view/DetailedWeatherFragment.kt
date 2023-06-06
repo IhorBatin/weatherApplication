@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.weatherapplication.R
 import com.weatherapplication.util.USE_USER_ENTRY
 import com.weatherapplication.view.ui.components.WeatherScreenComponents
 import com.weatherapplication.view.ui.theme.WeatherApplicationTheme
@@ -16,7 +18,8 @@ class DetailedWeatherFragment : Fragment() {
     private val viewModel: WeatherViewModel by lazy { (activity as MainActivity).viewModel }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
 
@@ -30,14 +33,10 @@ class DetailedWeatherFragment : Fragment() {
             setContent {
                 WeatherApplicationTheme {
                     WeatherScreenComponents(viewModel) {
-                        handleNavigation()
+                        findNavController().navigate(R.id.to_citySelectorFragment)
                     }
                 }
             }
         }
-    }
-
-    private fun handleNavigation() {
-
     }
 }

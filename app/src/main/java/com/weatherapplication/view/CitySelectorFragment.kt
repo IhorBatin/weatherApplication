@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.weatherapplication.R
 import com.weatherapplication.util.SP_LAST_CITY_NAME_KEY
 import com.weatherapplication.util.USE_USER_ENTRY
+import com.weatherapplication.view.ui.components.CloseButton
 import com.weatherapplication.view.ui.components.ErrorMessage
 import com.weatherapplication.view.ui.components.NextButton
 import com.weatherapplication.view.ui.components.SelectCityBar
@@ -34,6 +35,10 @@ class CitySelectorFragment : Fragment() {
             setContent {
                 WeatherApplicationTheme {
                     Column() {
+                        CloseButton(onCloseClick = {
+                                findNavController().navigate(R.id.to_detailedWeatherFragment)
+                            }
+                        )
                         SelectCityBar(viewModel)
                         NextButton(onNextClick = {
                                 viewModel.checkCityExists()

@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph_main"
-    app:startDestination="@id/citySelectorFragment">
+    app:startDestination="@id/detailedWeatherFragment">
     <fragment
         android:id="@+id/citySelectorFragment"
         android:name="com.weatherapplication.view.CitySelectorFragment"
@@ -14,5 +14,9 @@
     <fragment
         android:id="@+id/detailedWeatherFragment"
         android:name="com.weatherapplication.view.DetailedWeatherFragment"
-        android:label="DetailedWeatherFragment" />
+        android:label="DetailedWeatherFragment" >
+        <action
+            android:id="@+id/to_citySelectorFragment"
+            app:destination="@id/citySelectorFragment" />
+    </fragment>
 </navigation>

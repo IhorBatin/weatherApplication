@@ -61,7 +61,7 @@ class CitySelectorFragment : Fragment() {
             .getPreferences(Context.MODE_PRIVATE)
             .getString(SP_LAST_CITY_NAME_KEY, "") ?: ""
 
-        viewModel.selectedCityName.value = cityNameFromPrevSession
+        viewModel.setSelectedCityName(cityNameFromPrevSession)
     }
 
     private fun checkAndNavigateToWeatherFragment() {

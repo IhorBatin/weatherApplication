@@ -27,10 +27,6 @@ constructor(
     val selectedCityLonLat = mutableStateOf<CityCoordinates?>(null)
     val weatherData = mutableStateOf(WeatherForLocationResponse())
 
-
-    // val _selectedCityLonLat = MutableLiveData<CityCoordinates>()
-    // var selectedCityLonLat: LiveData<CityCoordinates> = _selectedCityLonLat
-
     fun setSelectedCityName(name: String) {
         selectedCityName.value = name
     }
@@ -58,6 +54,7 @@ constructor(
 
     fun geocodeByCityName() {
         viewModelScope.launch {
+            // Appending 'US' as we looking for cities within US only
             val usCityName = "${selectedCityName.value}, US"
             val response = repository.getLatLongForCity(usCityName)
             println("Response -> $response")

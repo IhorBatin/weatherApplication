@@ -29,9 +29,15 @@ class DetailedWeatherFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 WeatherApplicationTheme {
-                    WeatherScreenComponents(viewModel)
+                    WeatherScreenComponents(viewModel) {
+                        handleNavigation()
+                    }
                 }
             }
         }
+    }
+
+    private fun handleNavigation() {
+
     }
 }

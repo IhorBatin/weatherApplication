@@ -72,7 +72,7 @@ data class Main(
 	val seaLevel: String? = null,
 
 	@Json(name="feels_like")
-	val feelsLike: String? = null,
+	val feelsLike: Double? = null,
 
 	@Json(name="temp_max")
 	val tempMax: Double? = null
@@ -83,6 +83,7 @@ data class Main(
 
 	fun getMinTemp(): String = "${tempMin?.roundToInt()}"
 
+	fun getFeelsLikeTemp(): String = "${feelsLike?.roundToInt()}"
 }
 
 @JsonClass(generateAdapter = true)

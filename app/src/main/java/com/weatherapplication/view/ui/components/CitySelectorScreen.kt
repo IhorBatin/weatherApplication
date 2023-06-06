@@ -15,7 +15,7 @@ fun SelectCityBar(viewModel: WeatherViewModel) {
     AutoCompleteTextView(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(top = 16.dp, start = 8.dp, end = 8.dp, bottom = 8.dp),
         query = viewModel.selectedCityName.value,
         queryLabel = "Choose City",
         predictions = viewModel.possibleCityOptions,

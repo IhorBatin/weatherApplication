@@ -18,5 +18,4 @@ interface WeatherApiInterface {
         @Query("lat") latitude: String,
         @Query("lon") longitude: String
     ) : WeatherForLocationResponse
-
 }

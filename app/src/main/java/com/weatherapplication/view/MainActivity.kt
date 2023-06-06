@@ -37,14 +37,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         supportActionBar?.hide()
         setContentView(R.layout.activity_main)
-
         fusedLocationProvideClient = LocationServices.getFusedLocationProviderClient(this)
-        getLastLocation()
-    }
 
-    override fun onResume() {
-        super.onResume()
-        if(checkPermissions()) {
+        if (savedInstanceState == null) {
             getLastLocation()
         }
     }
@@ -57,9 +52,9 @@ class MainActivity : AppCompatActivity() {
                     val location = task.result
                     if (location == null) {
                         requestNewLocationData()
-                        //Toast.makeText(this, "Using device location.", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, "Using device location.", Toast.LENGTH_LONG).show()
                     } else {
-                        //Toast.makeText(this, "${ location.latitude}", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, "${ location.latitude}", Toast.LENGTH_LONG).show()
                         viewModel.updateCurrentLonLat(
                             CityCoordinates(
                                 location.longitude.toString(),
@@ -153,5 +148,10 @@ class MainActivity : AppCompatActivity() {
     fun getWeatherDataAndMoveToDetailsScreen() {
         viewModel.updateWeatherForCity()
         findNavController(R.id.nav_host_fragment).setGraph(R.navigation.nav_graph_device_loc)
+    }
+
+    override fun onBackPressed() {
+        // Overriding this since we use search to navigate back to city selector for ease of use
+        this.finish()
     }
 }

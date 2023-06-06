@@ -2,14 +2,21 @@ package com.weatherapplication.view.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -23,20 +30,41 @@ import com.weatherapplication.viewmodel.WeatherViewModel
 @Preview
 @Composable
 fun tesyt() {
-    //CurrentTemperature("32")
+    //DetailedInfo(viewModel)
 }
 
 @Composable
-fun WeatherScreenComponents(viewModel: WeatherViewModel) {
+fun WeatherScreenComponents(
+    viewModel: WeatherViewModel,
+    onSearchButtonClick: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
+        SearchButton { onSearchButtonClick() }
         viewModel.weatherData.value.name?.let { CityNameTitle(it) }
         viewModel.weatherData.value.main?.getTemp()?.let { CurrentTemperature(it) }
         CurrentCondition(viewModel.weatherData.value.weather?.get(0)?.description)
-        viewModel.weatherData.value.weather?.get(0)?.icon?.let { CurrentConditionIcon(it) }
+        DetailedInfo(viewModel)
+    }
+}
+
+@Composable
+fun SearchButton(
+    onSearchButtonClick: () -> Unit
+) {
+    IconButton(
+        modifier = Modifier.padding(4.dp),
+        onClick = { onSearchButtonClick() }
+    ) {
+        Icon(
+            modifier = Modifier.size(40.dp),
+            imageVector = Icons.Default.Search,
+            contentDescription = "Search city button",
+            tint = MaterialTheme.colorScheme.primary
+        )
     }
 }
 
@@ -45,7 +73,7 @@ fun CityNameTitle(name: String) {
     Text(
         text = name,
         modifier = Modifier
-            .padding(top = 24.dp, start = 4.dp, end = 4.dp, bottom = 16.dp)
+            .padding(top = 12.dp, start = 4.dp, end = 4.dp, bottom = 16.dp)
             .fillMaxWidth(),
         color = MaterialTheme.colorScheme.primary,
         textAlign = TextAlign.Center,
@@ -86,10 +114,47 @@ fun CurrentCondition(description: String?) {
 }
 
 @Composable
+fun DetailedInfo(viewModel: WeatherViewModel) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+    )
+    {
+        viewModel.weatherData.value.weather?.get(0)?.icon?.let { CurrentConditionIcon(it) }
+        Column(
+            horizontalAlignment = Alignment.Start,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp)
+        ) {
+            viewModel.weatherData.value.main?.let {
+                InfoTextElement("Feels like ${it.getFeelsLikeTemp()}°")
+                InfoTextElement("High ${it.getMaxTemp()}° / Low ${it.getMinTemp()}°")
+                InfoTextElement("Humidity ${it.humidity}%")
+            }
+        }
+    }
+}
+
+@Composable
 fun CurrentConditionIcon(conditionId: String) {
     AsyncImage(
         model = "https://openweathermap.org/img/wn/$conditionId@2x.png",
         contentDescription = null,
-        modifier = Modifier.width(120.dp).height(120.dp)
+        modifier = Modifier.width(150.dp).height(150.dp)
+    )
+}
+
+@Composable
+fun InfoTextElement(info: String) {
+    Text(
+        text = info,
+        modifier = Modifier
+            .padding(4.dp)
+            .fillMaxWidth(),
+        color = Color.White,
+        textAlign = TextAlign.Start,
+        style = MaterialTheme.typography.titleLarge,
+        fontWeight = FontWeight.Bold
     )
 }

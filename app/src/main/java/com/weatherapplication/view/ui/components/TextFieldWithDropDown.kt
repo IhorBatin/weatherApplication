@@ -67,7 +67,10 @@ fun AutoCompleteTextView(
                             onItemClick(prediction)
                         }
                 ) {
-                    Text(text = prediction.fullCityName)
+                    Text(
+                        text = prediction.fullCityName,
+                        color = MaterialTheme.colorScheme.primary
+                    )
                 }
             }
         }

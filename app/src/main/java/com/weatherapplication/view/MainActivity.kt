@@ -54,7 +54,6 @@ class MainActivity : AppCompatActivity() {
                         requestNewLocationData()
                         Toast.makeText(this, "Using device location.", Toast.LENGTH_LONG).show()
                     } else {
-                        Toast.makeText(this, "${ location.latitude}", Toast.LENGTH_LONG).show()
                         viewModel.updateCurrentLonLat(
                             CityCoordinates(
                                 location.longitude.toString(),

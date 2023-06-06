@@ -16,15 +16,15 @@ import javax.inject.Inject
 class WeatherViewModel
 @Inject
 constructor(
-    private val application: Application,
+    application: Application,
     private val repository: WeatherRepository
 ) : AndroidViewModel(application) {
 
+    private val selectedCityLonLat = mutableStateOf<CityCoordinates?>(null)
     val possibleCityOptions = mutableListOf<City>()
     val selectedCityName = mutableStateOf("")
     val doesCityExist = mutableStateOf(false)
     val shouldShowError = mutableStateOf(false)
-    val selectedCityLonLat = mutableStateOf<CityCoordinates?>(null)
     val weatherData = mutableStateOf(WeatherForLocationResponse())
 
     fun setSelectedCityName(name: String) {

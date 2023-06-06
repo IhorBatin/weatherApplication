@@ -21,24 +21,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.weatherapplication.model.data.City
-
-@Preview
-@Composable
-fun prev() {
-    AutoCompleteTextView(
-        modifier = Modifier.fillMaxWidth(),
-        query = "",
-        queryLabel = "",
-        predictions = listOf(City("", 3)),
-        onDoneActionClick = {},
-        onClearClick = {},
-        onQueryChanged = {}
-    )
-
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,8 +34,7 @@ fun AutoCompleteTextView(
     predictions: List<City>,
     onDoneActionClick: () -> Unit = {},
     onClearClick: () -> Unit = {},
-    onItemClick: (City) -> Unit = {},
-    //itemContent: @Composable (T) -> Unit = {}
+    onItemClick: (City) -> Unit = {}
 ) {
     val view = LocalView.current
     val lazyListState = rememberLazyListState()
@@ -132,6 +115,3 @@ fun QuerySearch(
         })
     )
 }
-
-
-

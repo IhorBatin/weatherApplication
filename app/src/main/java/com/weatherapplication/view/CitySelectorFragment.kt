@@ -34,7 +34,7 @@ class CitySelectorFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 WeatherApplicationTheme {
-                    Column() {
+                    Column {
                         CloseButton(onCloseClick = {
                                 findNavController().navigate(R.id.to_detailedWeatherFragment)
                             }

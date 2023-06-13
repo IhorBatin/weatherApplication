@@ -9,8 +9,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -18,9 +21,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -35,11 +38,22 @@ fun WeatherScreenComponents(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
+            .verticalScroll(rememberScrollState())
     ) {
         SearchButton { onSearchButtonClick() }
-        viewModel.weatherData.value.name?.let { CityNameTitle(it) }
-        viewModel.weatherData.value.main?.getTemp()?.let { CurrentTemperature(it) }
-        CurrentCondition(viewModel.weatherData.value.weather?.get(0)?.description)
+        if (viewModel.showLoadingIndicator.value) {
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .align(alignment = Alignment.CenterHorizontally),
+                color = MaterialTheme.colorScheme.primary
+            )
+        }
+        viewModel.weatherData.value.let { weatherData ->
+            weatherData.name?.let { CityNameTitle(it) }
+            weatherData.main?.getTemp()?.let { CurrentTemperature(it) }
+            weatherData.weather?.get(0)?.description.let { CurrentCondition(it) }
+        }
         DetailedInfo(viewModel)
     }
 }
@@ -82,7 +96,7 @@ fun CurrentTemperature(temperature: String) {
         modifier = Modifier
             .padding(top = 16.dp, start = 4.dp, end = 4.dp)
             .fillMaxWidth(),
-        color = Color.White,
+        color = MaterialTheme.colorScheme.secondary,
         textAlign = TextAlign.Center,
         style = MaterialTheme.typography.headlineLarge,
         fontWeight = FontWeight.Bold,
@@ -98,7 +112,7 @@ fun CurrentCondition(description: String?) {
             modifier = Modifier
                 .padding(8.dp)
                 .fillMaxWidth(),
-            color = Color.White,
+            color = MaterialTheme.colorScheme.secondary,
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Normal,
@@ -134,7 +148,9 @@ fun CurrentConditionIcon(conditionId: String) {
     AsyncImage(
         model = "https://openweathermap.org/img/wn/$conditionId@2x.png",
         contentDescription = null,
-        modifier = Modifier.width(150.dp).height(150.dp)
+        modifier = Modifier
+            .width(150.dp)
+            .height(150.dp)
     )
 }
 
@@ -145,7 +161,7 @@ fun InfoTextElement(info: String) {
         modifier = Modifier
             .padding(4.dp)
             .fillMaxWidth(),
-        color = Color.White,
+        color = MaterialTheme.colorScheme.secondary,
         textAlign = TextAlign.Start,
         style = MaterialTheme.typography.titleLarge,
         fontWeight = FontWeight.Bold

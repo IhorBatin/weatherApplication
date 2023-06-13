@@ -10,6 +10,7 @@ import com.weatherapplication.model.data.WeatherForLocationResponse
 import com.weatherapplication.model.repo.WeatherRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,6 +26,7 @@ constructor(
     val selectedCityName = mutableStateOf("")
     val doesCityExist = mutableStateOf(false)
     val shouldShowError = mutableStateOf(false)
+    val showLoadingIndicator = mutableStateOf(true)
     val weatherData = mutableStateOf(WeatherForLocationResponse())
 
     fun setSelectedCityName(name: String) {
@@ -56,12 +58,19 @@ constructor(
 
     fun geocodeByCityName() {
         viewModelScope.launch {
+            showLoadingIndicator.value = true
             // Appending 'US' as we looking for cities within US only
             val usCityName = "${selectedCityName.value}, US"
-            val response = repository.getLatLongForCity(usCityName)
-            println("Response -> $response")
-            updateCurrentLonLat(response[0])
-            updateWeatherForCity()
+            try {
+                val response = repository.getLatLongForCity(usCityName)
+                if (response.isNotEmpty()) {
+                    updateCurrentLonLat(response[0])
+                    updateWeatherForCity()
+                }
+            } catch (exception: Exception) {
+                println(exception.message)
+            }
+
         }
     }
 
@@ -71,10 +80,17 @@ constructor(
 
     fun updateWeatherForCity() {
         viewModelScope.launch {
-            val resp = selectedCityLonLat.value?.let { repository.getCityWeather(it) }
-            println(resp)
-            if (resp != null) {
-                weatherData.value = resp
+            showLoadingIndicator.value = true
+            try {
+                val resp = selectedCityLonLat.value?.let {
+                    repository.getCityWeather(it)
+                }
+                if (resp != null) {
+                    weatherData.value = resp
+                    showLoadingIndicator.value = false
+                }
+            } catch (exception: Exception) {
+                println(exception.message)
             }
         }
     }

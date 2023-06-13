@@ -6,6 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -34,7 +37,9 @@ class CitySelectorFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 WeatherApplicationTheme {
-                    Column {
+                    Column(
+                        modifier = Modifier.verticalScroll(rememberScrollState())
+                    ) {
                         CloseButton(onCloseClick = {
                                 findNavController().navigate(R.id.to_detailedWeatherFragment)
                             }

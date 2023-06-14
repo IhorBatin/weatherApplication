@@ -18,7 +18,7 @@ constructor(
 
     suspend fun getLatLongForCity(cityName: String) = apiInterface.getCityLatLong(cityName)
 
-    suspend fun getCityWeather(cityCoordinates: CityCoordinates) =
-        apiInterface.getWeatherForLocation(cityCoordinates.lat, cityCoordinates.lon)
+    suspend fun getCityWeather(cityCoordinates: CityCoordinates, units: String) =
+        apiInterface.getWeatherForLocation(cityCoordinates.lat, cityCoordinates.lon, units)
 
 }

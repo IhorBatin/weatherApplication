@@ -13,9 +13,10 @@ interface WeatherApiInterface {
         @Query("q") cityName: String
     ): List<CityCoordinates>
 
-    @GET("/data/2.5/weather?appid=$API_KEY&units=imperial")
+    @GET("/data/2.5/weather?appid=$API_KEY")
     suspend fun getWeatherForLocation(
         @Query("lat") latitude: String,
-        @Query("lon") longitude: String
+        @Query("lon") longitude: String,
+        @Query("units") units: String
     ) : WeatherForLocationResponse
 }

@@ -146,7 +146,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getWeatherDataAndMoveToDetailsScreen() {
-        viewModel.updateWeatherForCity()
+        viewModel.updateWeatherData()
         //findNavController(R.id.nav_host_fragment).navigate(R.id.to_detailedWeatherFragment)
     }
 

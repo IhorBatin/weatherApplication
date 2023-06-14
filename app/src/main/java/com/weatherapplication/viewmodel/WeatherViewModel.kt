@@ -28,6 +28,7 @@ constructor(
     val shouldShowError = mutableStateOf(false)
     val showLoadingIndicator = mutableStateOf(true)
     val weatherData = mutableStateOf(WeatherForLocationResponse())
+    val unitsSwitchPosition = mutableStateOf(false)
 
     fun setSelectedCityName(name: String) {
         selectedCityName.value = name
@@ -65,7 +66,7 @@ constructor(
                 val response = repository.getLatLongForCity(usCityName)
                 if (response.isNotEmpty()) {
                     updateCurrentLonLat(response[0])
-                    updateWeatherForCity()
+                    updateWeatherData()
                 }
             } catch (exception: Exception) {
                 println(exception.message)
@@ -78,12 +79,12 @@ constructor(
         selectedCityLonLat.value = coordinates
     }
 
-    fun updateWeatherForCity() {
+    fun updateWeatherData() {
         viewModelScope.launch {
             showLoadingIndicator.value = true
             try {
                 val resp = selectedCityLonLat.value?.let {
-                    repository.getCityWeather(it)
+                    repository.getCityWeather(it, getUnits())
                 }
                 if (resp != null) {
                     weatherData.value = resp
@@ -103,5 +104,16 @@ constructor(
     fun clearCityOptions() {
         selectedCityName.value = ""
         possibleCityOptions.clear()
+    }
+
+    private fun getUnits(): String {
+        return when (unitsSwitchPosition.value) {
+            true -> "imperial"
+            false -> "metric"
+        }
+    }
+
+    fun updateUnits() {
+
     }
 }

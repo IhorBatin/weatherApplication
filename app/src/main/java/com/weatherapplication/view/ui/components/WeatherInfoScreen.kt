@@ -1,9 +1,9 @@
 package com.weatherapplication.view.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -25,36 +25,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.weatherapplication.viewmodel.WeatherViewModel
-
-@Preview
-@Composable
-fun test() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()
-    ) {
-        SearchButton { {} }
-        Spacer(modifier = Modifier.fillMaxWidth(.7f))
-        Row(
-            modifier = Modifier
-                .padding(4.dp)
-                .wrapContentWidth()
-        ) {
-            Text(text = "C",  color = Color.White)
-            Switch(checked = false, onCheckedChange = {})
-            Text(text = "F", color = Color.White)
-        }
-    }
-}
 
 @Composable
 fun WeatherScreenComponents(
@@ -100,13 +76,15 @@ fun TopBar(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
+            .padding(4.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         SearchButton { onSearchButtonClick() }
-        Spacer(modifier = Modifier.fillMaxWidth(.7f))
         Row(
             modifier = Modifier
                 .padding(4.dp)
                 .wrapContentWidth()
+                .weight(1f, false)
         ) {
             UnitTextElement("C")
             Switch(

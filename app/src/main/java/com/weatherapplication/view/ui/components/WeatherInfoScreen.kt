@@ -57,7 +57,7 @@ fun WeatherScreenComponents(
                 color = MaterialTheme.colorScheme.primary
             )
         }
-        viewModel.weatherData.value.let { weatherData ->
+        viewModel.currentWeatherData.value.let { weatherData ->
             weatherData.name?.let { CityNameTitle(it) }
             weatherData.main?.getTemp()?.let { CurrentTemperature(it) }
             weatherData.weather?.get(0)?.description.let { CurrentCondition(it) }
@@ -165,14 +165,14 @@ fun DetailedInfo(viewModel: WeatherViewModel) {
         verticalAlignment = Alignment.CenterVertically,
     )
     {
-        viewModel.weatherData.value.weather?.get(0)?.icon?.let { CurrentConditionIcon(it) }
+        viewModel.currentWeatherData.value.weather?.get(0)?.icon?.let { CurrentConditionIcon(it) }
         Column(
             horizontalAlignment = Alignment.Start,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 16.dp)
         ) {
-            viewModel.weatherData.value.main?.let {
+            viewModel.currentWeatherData.value.main?.let {
                 InfoTextElement("Feels like ${it.getFeelsLikeTemp()}°")
                 InfoTextElement("High ${it.getMaxTemp()}° / Low ${it.getMinTemp()}°")
                 InfoTextElement("Humidity ${it.humidity}%")

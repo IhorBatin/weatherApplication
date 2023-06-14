@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.weatherapplication.model.data.CityCoordinates
 import com.weatherapplication.model.data.City
 import com.weatherapplication.model.data.WeatherForLocationResponse
+import com.weatherapplication.model.data.WeatherForecastResponse
 import com.weatherapplication.model.repo.WeatherRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -27,7 +28,8 @@ constructor(
     val doesCityExist = mutableStateOf(false)
     val shouldShowError = mutableStateOf(false)
     val showLoadingIndicator = mutableStateOf(true)
-    val weatherData = mutableStateOf(WeatherForLocationResponse())
+    val currentWeatherData = mutableStateOf(WeatherForLocationResponse())
+    val forecastWeatherData = mutableStateOf(WeatherForecastResponse())
     val unitsSwitchState = mutableStateOf(false)
 
     fun setSelectedCityName(name: String) {
@@ -84,16 +86,23 @@ constructor(
             showLoadingIndicator.value = true
             try {
                 val resp = selectedCityLonLat.value?.let {
-                    repository.getCityWeather(it, getUnits())
+                    repository.getCurrentWeather(it, getUnits())
+                }
+                val forecastResp = selectedCityLonLat.value?.let {
+                    repository.getWeatherForecast(it, getUnits(), 5)
                 }
                 if (resp != null) {
-                    weatherData.value = resp
+                    currentWeatherData.value = resp
                     showLoadingIndicator.value = false
                 }
             } catch (exception: Exception) {
                 println(exception.message)
             }
         }
+    }
+
+    fun updateForecast() {
+
     }
 
     fun onCityListItemClick(city: City) {

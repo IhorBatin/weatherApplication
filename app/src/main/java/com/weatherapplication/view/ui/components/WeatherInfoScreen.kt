@@ -59,7 +59,8 @@ fun test() {
 @Composable
 fun WeatherScreenComponents(
     viewModel: WeatherViewModel,
-    onSearchButtonClick: () -> Unit
+    onSearchButtonClick: () -> Unit,
+    onUnitsChanged: (Boolean) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -70,7 +71,7 @@ fun WeatherScreenComponents(
         TopBar(
             viewModel = viewModel,
             onSearchButtonClick = { onSearchButtonClick() },
-            onUnitsSwitched = { viewModel.updateWeatherData()}
+            onUnitsSwitched = { onUnitsChanged(it) }
         )
         if (viewModel.showLoadingIndicator.value) {
             CircularProgressIndicator(
@@ -93,7 +94,7 @@ fun WeatherScreenComponents(
 fun TopBar(
     viewModel: WeatherViewModel,
     onSearchButtonClick: () -> Unit,
-    onUnitsSwitched: () -> Unit
+    onUnitsSwitched: (Boolean) -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -109,11 +110,8 @@ fun TopBar(
         ) {
             UnitTextElement("C")
             Switch(
-                checked = viewModel.unitsSwitchPosition.value,
-                onCheckedChange = {
-                    viewModel.unitsSwitchPosition.value = it
-                    onUnitsSwitched()
-                }
+                checked = viewModel.unitsSwitchState.value,
+                onCheckedChange = { onUnitsSwitched(it) }
             )
             UnitTextElement("F")
         }

@@ -33,7 +33,7 @@ fun SelectCityBar(viewModel: WeatherViewModel) {
             viewModel.checkCityExists()
         },
         onItemClick = {
-            viewModel.onItemClick(it)
+            viewModel.onCityListItemClick(it)
             viewModel.selectedCityName.value = it.fullCityName
             viewModel.checkCityExists()
         },

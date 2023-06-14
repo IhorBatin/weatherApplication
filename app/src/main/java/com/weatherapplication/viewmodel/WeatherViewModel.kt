@@ -28,7 +28,7 @@ constructor(
     val shouldShowError = mutableStateOf(false)
     val showLoadingIndicator = mutableStateOf(true)
     val weatherData = mutableStateOf(WeatherForLocationResponse())
-    val unitsSwitchPosition = mutableStateOf(false)
+    val unitsSwitchState = mutableStateOf(false)
 
     fun setSelectedCityName(name: String) {
         selectedCityName.value = name
@@ -96,7 +96,7 @@ constructor(
         }
     }
 
-    fun onItemClick(city: City) {
+    fun onCityListItemClick(city: City) {
         selectedCityName.value = city.fullCityName
         possibleCityOptions.clear()
     }
@@ -107,13 +107,13 @@ constructor(
     }
 
     private fun getUnits(): String {
-        return when (unitsSwitchPosition.value) {
+        return when (unitsSwitchState.value) {
             true -> "imperial"
             false -> "metric"
         }
     }
 
-    fun updateUnits() {
-
+    fun updateUnits(value: Boolean) {
+        unitsSwitchState.value = value
     }
 }

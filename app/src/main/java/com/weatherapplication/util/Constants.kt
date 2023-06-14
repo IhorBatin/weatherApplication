@@ -8,3 +8,4 @@ const val PERMISSION_ID = 100
 const val USE_USER_ENTRY = "useUserEntry"
 
 const val SP_LAST_CITY_NAME_KEY = "lastCityName"
+const val SP_UNIT_SWITCH_STATE_KEY = "unitsSwitchState"

@@ -9,6 +9,10 @@ import com.weatherapplication.model.data.City
 import com.weatherapplication.model.data.WeatherForLocationResponse
 import com.weatherapplication.model.data.WeatherForecastResponse
 import com.weatherapplication.model.repo.WeatherRepository
+import com.weatherapplication.util.EMPTY_STRING
+import com.weatherapplication.util.NUM_OF_TIMESTAMPS
+import com.weatherapplication.util.UNIT_IMPERIAL
+import com.weatherapplication.util.UNIT_METRIC
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.lang.Exception
@@ -73,7 +77,6 @@ constructor(
             } catch (exception: Exception) {
                 println(exception.message)
             }
-
         }
     }
 
@@ -88,21 +91,25 @@ constructor(
                 val resp = selectedCityLonLat.value?.let {
                     repository.getCurrentWeather(it, getUnits())
                 }
-                val forecastResp = selectedCityLonLat.value?.let {
-                    repository.getWeatherForecast(it, getUnits(), 5)
-                }
                 if (resp != null) {
                     currentWeatherData.value = resp
                     showLoadingIndicator.value = false
                 }
+                updateForecast()
             } catch (exception: Exception) {
                 println(exception.message)
             }
         }
     }
 
-    fun updateForecast() {
-
+    private suspend fun updateForecast() {
+        val forecastResp = selectedCityLonLat.value?.let {
+            repository.getWeatherForecast(it, getUnits(), NUM_OF_TIMESTAMPS)
+        }
+        if (forecastResp != null) {
+            forecastWeatherData.value = forecastResp
+            showLoadingIndicator.value = false
+        }
     }
 
     fun onCityListItemClick(city: City) {
@@ -111,14 +118,14 @@ constructor(
     }
 
     fun clearCityOptions() {
-        selectedCityName.value = ""
+        selectedCityName.value = EMPTY_STRING
         possibleCityOptions.clear()
     }
 
     private fun getUnits(): String {
         return when (unitsSwitchState.value) {
-            true -> "imperial"
-            false -> "metric"
+            true -> UNIT_IMPERIAL
+            false -> UNIT_METRIC
         }
     }
 

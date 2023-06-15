@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -12,6 +13,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -30,6 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.weatherapplication.model.data.ForecastItem
 import com.weatherapplication.viewmodel.WeatherViewModel
 
 @Composable
@@ -63,6 +67,7 @@ fun WeatherScreenComponents(
             weatherData.weather?.get(0)?.description.let { CurrentCondition(it) }
         }
         DetailedInfo(viewModel)
+        ForecastRow(viewModel)
     }
 }
 
@@ -118,7 +123,7 @@ fun CityNameTitle(name: String) {
     Text(
         text = name,
         modifier = Modifier
-            .padding(top = 12.dp, start = 4.dp, end = 4.dp, bottom = 16.dp)
+            .padding(top = 12.dp, start = 4.dp, end = 4.dp, bottom = 4.dp)
             .fillMaxWidth(),
         color = MaterialTheme.colorScheme.primary,
         textAlign = TextAlign.Center,
@@ -132,7 +137,7 @@ fun CurrentTemperature(temperature: String) {
     Text(
         text = "$temperature°",
         modifier = Modifier
-            .padding(top = 16.dp, start = 4.dp, end = 4.dp)
+            .padding(4.dp)
             .fillMaxWidth(),
         color = MaterialTheme.colorScheme.secondary,
         textAlign = TextAlign.Center,
@@ -193,6 +198,34 @@ fun CurrentConditionIcon(conditionId: String) {
 }
 
 @Composable
+fun ForecastConditionIcon(conditionId: String) {
+    AsyncImage(
+        model = "https://openweathermap.org/img/wn/$conditionId@2x.png",
+        contentDescription = null,
+        modifier = Modifier
+            .width(60.dp)
+            .height(60.dp)
+    )
+}
+
+@Composable
+fun ForecastRow(viewModel: WeatherViewModel) {
+    Spacer(modifier = Modifier.padding(top = 16.dp))
+    LazyRow(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .padding(4.dp)
+    ) {
+        items(viewModel.forecastWeatherData.value.forecasts ?: listOf()) { forecastItem ->
+            if (forecastItem != null) {
+                ForecastListItem(forecastItem)
+            }
+        }
+    }
+}
+
+@Composable
 fun InfoTextElement(info: String) {
     Text(
         text = info,
@@ -215,4 +248,32 @@ fun UnitTextElement(info: String) {
         style = MaterialTheme.typography.titleLarge,
         fontWeight = FontWeight.Bold
     )
+}
+
+@Composable
+fun ForecastTextElement(text: String) {
+    Text(
+        text = text,
+        color = MaterialTheme.colorScheme.secondary,
+        style = MaterialTheme.typography.titleMedium,
+        fontWeight = FontWeight.Normal
+    )
+}
+
+@Composable
+fun ForecastListItem(forecastItem: ForecastItem) {
+    Column(
+        modifier = Modifier.padding(2.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+
+    ) {
+        forecastItem.let { forecast ->
+            ForecastTextElement(forecast.getDay())
+            ForecastTextElement(forecast.getHour())
+            forecast.weather?.get(0)?.let { weather ->
+                weather.icon?.let { ForecastConditionIcon(it) }
+            }
+            forecast.main?.getTemp()?.let { ForecastTextElement("$it°") }
+        }
+    }
 }
